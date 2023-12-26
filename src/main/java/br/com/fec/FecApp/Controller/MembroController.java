@@ -2,6 +2,7 @@ package br.com.fec.FecApp.Controller;
 
 import br.com.fec.FecApp.DTO.MembroDTO.PostMembroDTO;
 import br.com.fec.FecApp.Domain.Membro;
+import br.com.fec.FecApp.Exceptions.DomainException;
 import br.com.fec.FecApp.Repositories.MembroRepository.IMembroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,13 @@ public class MembroController {
 
     @GetMapping("/{membroId}") // Mapeia GET para /grupos/{grupoId}
     public ResponseEntity<Membro> getMembro(@PathVariable String membroId){
-        var membro = membroRepository.findById(membroId).get();
-        return ResponseEntity.ok(membro);
+        try{
+            var membro = membroRepository.findById(membroId).get();
+            return ResponseEntity.ok(membro);
+        } catch (Exception e){
+            throw new DomainException("USER NOT FOUND");
+        }
+
     }
 
     @GetMapping() // Mapeia GET para /grupos/{grupoId}
