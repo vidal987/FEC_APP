@@ -6,10 +6,10 @@ import br.com.fec.FecApp.Domain.ValuesObjects.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class Membro extends BaseEntity {
 
     private String LastName;
 
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Embedded
     private Address address;
@@ -28,27 +28,10 @@ public class Membro extends BaseEntity {
     @Embedded
     private PhoneNumber phoneNumber;
 
-    @ManyToMany
-    @JoinTable(
-            name = "membro_grupo",
-            joinColumns = @JoinColumn(name = "membro_id"),
-            inverseJoinColumns = @JoinColumn(name = "groupo_id")
-    )
-    private List<Grupo> grupos = new ArrayList<>();
-
-    public Membro(String name, String lastName){
+    public Membro(String name, String lastName, LocalDate birth){
         super();
         this.Name = name;
         this.LastName = lastName;
-    }
-
-    public void addGroup(Grupo grupo) {
-        grupos.add(grupo);
-        grupo.getMembros().add(this);
-    }
-
-    public void removeGroup(Grupo grupo) {
-        grupos.remove(grupo);
-        grupo.getMembros().remove(this);
+        this.dateOfBirth = birth;
     }
 }

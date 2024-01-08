@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,8 @@ public class MembroController {
     @PostMapping
     @Transactional
     public ResponseEntity<Membro> postMembro(@RequestBody PostMembroDTO membro){
-        var newMembro = membroRepository.save(new Membro(membro.name(), membro.lastName()));
-        return ResponseEntity.ok(newMembro);
+        var newMembro = membroRepository.save(new Membro(membro.name(), membro.lastName(), membro.birth()));
+        String urlmMembro = "/membros/" + newMembro.getId();
+        return ResponseEntity.created(URI.create(urlmMembro)).body(newMembro);
     }
 }
